@@ -1,6 +1,6 @@
 # typings
 
-<a href="https://typings.gg" target="_blank">typings.gg</a> is a sleek and modern typing test website. it supports many custom themes
+<a href="https://hamptonmoore.github.io/typing/" target="_blank">hamptonmoore.github.io/typing/</a> is a fork of the sleek and modern typing test website <a href="https://typings.gg" >typings.gg</a>. it is for the purpose of accepting pull requests that typings.gg creator has left unaccepted, and for quality of life changes that i enjoy
 
 ![typings.gg](img/typings-screen-shot.png)
 
