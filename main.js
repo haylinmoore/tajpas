@@ -3,6 +3,7 @@ const textDisplay = document.querySelector('#text-display');
 const inputField = document.querySelector('#input-field');
 const canvas = document.createElement('canvas');
 const favicon = document.querySelector('#favicon');
+const redoButton = document.querySelector('#redo-button');
 let ctx = canvas.getContext("2d");
 
 // Initialize typing mode variables
@@ -211,6 +212,7 @@ inputField.addEventListener('keydown', e => {
       correctKeys += wordList[currentWord].length;
       currentWord++;
       showResult();
+      redoButton.focus()
     }
   }
 });
