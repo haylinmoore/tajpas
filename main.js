@@ -548,17 +548,6 @@ document.getElementById('show-themes').addEventListener('keydown', (e) => {
 	}
 });
 
-function showThemeCenter() {
-	document.getElementById('theme-center').classList.remove('hidden');
-	document.getElementById('command-center').classList.add('hidden');
-	document.getElementById('language-center').classList.add('hidden');
-}
-
-function hideThemeCenter() {
-	document.getElementById('theme-center').classList.add('hidden');
-	document.getElementById('command-center').classList.remove('hidden');
-}
-
 document.querySelector('body').addEventListener('transitionend', function () {
 	setFavicon();
 });
@@ -621,6 +610,33 @@ function showLanguageCenter() {
 function hideLanguageCenter() {
 	document.getElementById('language-center').classList.add('hidden');
 	document.getElementById('command-center').classList.remove('hidden');
+}
+
+function toggleLanguageCenter(){
+	if (document.querySelector('#language-center').classList.contains('hidden')) {
+		showLanguageCenter();
+	} else {
+		hideLanguageCenter();
+	}
+}
+
+function showThemeCenter() {
+	document.getElementById('theme-center').classList.remove('hidden');
+	document.getElementById('command-center').classList.add('hidden');
+	document.getElementById('language-center').classList.add('hidden');
+}
+
+function hideThemeCenter() {
+	document.getElementById('theme-center').classList.add('hidden');
+	document.getElementById('command-center').classList.remove('hidden');
+}
+
+function toggleThemeCenter(){
+	if (document.querySelector('#theme-center').classList.contains('hidden')) {
+		showThemeCenter();
+	} else {
+		hideThemeCenter();
+	}
 }
 
 function showErrorMessage(message) {
