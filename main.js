@@ -634,3 +634,14 @@ function showErrorMessage(message) {
 
 	element.appendChild(document.createTextNode(message));
 }
+
+// mouse actions
+document.addEventListener('mouseup', e => {
+	if (e.target.nodeName === 'BODY' && (!document.querySelector('#theme-center').classList.contains('hidden'))) {
+		hideThemeCenter();
+		inputField.focus();
+	} else if (e.target.nodeName === 'BODY' && (!document.querySelector('#language-center').classList.contains('hidden'))) {
+		hideLanguageCenter();
+		inputField.focus();
+	}
+});
