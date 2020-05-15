@@ -266,7 +266,7 @@ inputField.addEventListener('keydown', e => {
 			inputField.value += e.key;
 			redoButton.focus()
 			end();
-			
+
 		}
 	}
 });
@@ -338,21 +338,15 @@ document.addEventListener('keydown', e => {
 		if (e.key === 'r') {
 			setRealTime(inputField.value);
 		}
-	} else if (!document.querySelector('#theme-center').classList.contains('hidden')) {
+	} else if (!document.querySelector('#theme-center').classList.contains('hidden') ||
+		!document.querySelector('#language-center').classList.contains('hidden')) {
 		if (e.key === 'Escape') {
 			hideThemeCenter();
+			hideLanguageCenter();
 			inputField.focus();
 		}
 	} else if (e.key === 'Escape') {
 		setText(e);
-	}
-});
-
-// mouse actions
-document.addEventListener('mouseup', e => {
-	if (e.target.nodeName === 'BODY' && !document.querySelector('#theme-center').classList.contains('hidden')) {
-		hideThemeCenter();
-		inputField.focus();
 	}
 });
 
@@ -390,6 +384,11 @@ function setFavicon() {
 
 function setLanguage(_lang) {
 	const lang = _lang.toLowerCase();
+
+	if (!lang) {
+		showErrorMessage("please type the language code for example german in the text box");
+	}
+
 	fetch('texts/random.json')
 		.then(response => response.json())
 		.then(json => {
@@ -407,7 +406,7 @@ function setLanguage(_lang) {
 
 				setText();
 			} else {
-				console.error(`language ${lang} is undefine`);
+				console.error(`language ${lang} is undefined`);
 			}
 		})
 		.catch(err => console.error(err));
@@ -541,7 +540,6 @@ function showAllThemes() {
 		})
 		.catch(err => console.error(err));
 }
-
 // enter to open theme area
 document.getElementById('show-themes').addEventListener('keydown', (e) => {
 	if (e.key === 'Enter') {
@@ -553,6 +551,7 @@ document.getElementById('show-themes').addEventListener('keydown', (e) => {
 function showThemeCenter() {
 	document.getElementById('theme-center').classList.remove('hidden');
 	document.getElementById('command-center').classList.add('hidden');
+	document.getElementById('language-center').classList.add('hidden');
 }
 
 function hideThemeCenter() {
@@ -568,4 +567,70 @@ function setRealTime(value) {
 	realTime = value === "true";
 	setCookie('realTime', realTime, 90);
 	setText();
+}
+
+//Language change functions
+showAllLanguages();
+
+function showAllLanguages() {
+	fetch("texts/random.json")
+		.then(response => {
+			if (response.status === 200) {
+				response
+					.text()
+					.then(body => {
+						let languages = JSON.parse(body);
+						let keys = Object.keys(languages);
+						let i;
+
+						for (i = 0; i < keys.length; i++) {
+
+							let language = document.createElement('div');
+							language.setAttribute('class', 'theme-button');
+							language.setAttribute('onClick', `setLanguage('${keys[i]}')`);
+							language.setAttribute('id', keys[i]);
+
+							language.setAttribute('tabindex', i + 5);
+							language.addEventListener('keydown', e => {
+								if (e.key === 'Enter') {
+									setTheme(language.id);
+									inputField.focus();
+								}
+							})
+
+							language.textContent = keys[i];
+							language.style.background = "rgb(250, 250, 250)";
+							language.style.color = languages[keys[i]]['color'];
+							document.getElementById('language-area').appendChild(language);
+						}
+					})
+					.catch(err => console.error(err));
+			} else {
+				console.log(`Cant find languages`);
+			}
+		})
+		.catch(err => console.error(err));
+}
+
+function showLanguageCenter() {
+	document.getElementById('language-center').classList.remove('hidden');
+	document.getElementById('theme-center').classList.add('hidden');
+	document.getElementById('command-center').classList.add('hidden');
+}
+
+function hideLanguageCenter() {
+	document.getElementById('language-center').classList.add('hidden');
+	document.getElementById('command-center').classList.remove('hidden');
+}
+
+function showErrorMessage(message) {
+	if (!message)
+		return;
+
+	let element = document.querySelector('#error-message');
+
+	if (element.classList.contains('hidden'))
+		element.classList.remove('hidden');
+
+	element.appendChild(document.createTextNode(message));
 }

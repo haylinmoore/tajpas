@@ -33,7 +33,7 @@ body {
 }
 
 #typing-area,
-#theme-area {
+.config-area {
   background: #5b3217;
 }
 

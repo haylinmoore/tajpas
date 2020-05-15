@@ -14,7 +14,7 @@ body {
   color: #1a1a1a;
 }
 
-#typing-area, #theme-area {
+#typing-area, .config-area {
   background: #eaeaea;
 }
 
