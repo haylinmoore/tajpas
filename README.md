@@ -80,6 +80,10 @@ available modes:
 
 type `true` or `false` then hit [ windows: <kbd>alt</kbd> + <kbd>p</kbd> ], [ mac: <kbd>cmd</kbd> + <kbd>ctrl</kbd> + <kbd>p</kbd>], [ linux: <kbd>super</kbd> + <kbd>ctrl</kbd> + <kbd>p</kbd> or <kbd>alt</kbd> + <kbd>p</kbd> ] to activate/deactivate punctuations
 
+## real time words per minute
+
+type `true` or `false` then hit [ windows: <kbd>alt</kbd> + <kbd>r</kbd> ], [ mac: <kbd>cmd</kbd> + <kbd>ctrl</kbd> + <kbd>r</kbd>], [ linux: <kbd>super</kbd> + <kbd>ctrl</kbd> + <kbd>r</kbd> or <kbd>alt</kbd> + <kbd>r</kbd> ] to activate/deactivate real time words per minute
+
 ## theme menu
 
 in this menu you can see all the available themes to choose from, along with a small preview. hit <kbd>escape</kbd> or click 'back' to exit
