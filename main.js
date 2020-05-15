@@ -42,9 +42,14 @@ getCookie('punctuation') === '' ? setPunctuation('false') : setPunctuation(getCo
 setRealTime(getCookie("realTime"));
 
 // Find a list of words and display it to textDisplay
-function setText() {
+function setText(e) {
+  e = e || window.event;
+  var keepWordList = e && e.shiftKey;
+
   // Reset
-  wordList = [];
+  if (!keepWordList) {
+    wordList = [];
+  }
   currentWord = 0;
   correctKeys = 0;
   inputField.value = '';
@@ -65,6 +70,11 @@ function setText() {
         while (wordList.length < wordCount) {
           const randomWord = randomWords[Math.floor(Math.random() * randomWords.length)];
           if (wordList[wordList.length - 1] !== randomWord || wordList[wordList.length - 1] === undefined) {
+      if (!keepWordList) {
+        wordList = [];
+        while (wordList.length < wordCount) {
+          const randomWord = randomWords[Math.floor(Math.random() * randomWords.length)];
+          if (wordList[wordList.length - 1] !== randomWord || wordList[wordList.length - 1] === undefined || getCookie('language') === 'dots') {
             wordList.push(randomWord);
           }
         }
@@ -75,10 +85,12 @@ function setText() {
       textDisplay.style.height = '3.2rem';
       document.querySelector(`#tc-${timeCount}`).innerHTML = timeCount;
       textDisplay.innerHTML = '';
-      wordList = [];
-      for (i = 0; i < 500; i++) {
-        let n = Math.floor(Math.random() * randomWords.length);
-        wordList.push(randomWords[n]);
+      if (!keepWordList) {
+        wordList = [];
+        for (i = 0; i < 500; i++) {
+          let n = Math.floor(Math.random() * randomWords.length);
+          wordList.push(randomWords[n]);
+        }
       }
   }
 
@@ -324,6 +336,8 @@ document.addEventListener('keydown', e => {
       hideThemeCenter();
       inputField.focus();
     }
+  } else if (e.key === 'Escape') {
+    setText(e);
   }
 });
 
