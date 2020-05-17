@@ -1,6 +1,6 @@
-# typings
+# tajpas
 
-<a href="https://hamptonmoore.github.io/typings/" target="_blank">hamptonmoore.github.io/typings/</a> is a fork of the sleek and modern typing test website <a href="https://typings.gg" >typings.gg</a>. it is for the purpose of accepting pull requests that typings.gg creator has left unaccepted, and for quality of life changes that i enjoy
+<a href="https://hamptonmoore.github.io/tajpas/" target="_blank">hamptonmoore.github.io/tajpas/</a> is a fork of the sleek and modern typing test website <a href="https://typings.gg" >typings.gg</a>. it has the purpose of being more user friendly and having more quality of life features
 
 ![typings.gg](img/typings-screen-shot.png)
 
@@ -101,7 +101,3 @@ in this menu you can see all the available themes to choose from, along with a s
 wpm: total number of characters (including spaces) of words you got right divided by five then divided by the time starting from first character typed
 
 acc: total number of characters (including spaces) of words you got right divided by all character in the list of words
-
-## support
-
-- <a href="https://www.paypal.me/briano1905" target="_blank">PayPal</a>

@@ -44,6 +44,8 @@ getCookie('typingMode') === '' ? setTypingMode('wordcount') : setTypingMode(getC
 getCookie('punctuation') === '' ? setPunctuation('false') : setPunctuation(getCookie('punctuation'));
 getCookie('realTime') === '' ? setRealTime('false') : setRealTime(getCookie('realTime'));
 
+
+
 // Find a list of words and display it to textDisplay
 function setText(e) {
 	e = e || window.event;
