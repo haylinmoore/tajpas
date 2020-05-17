@@ -70,10 +70,11 @@ body {
 
 /* #left-wing {} */
 
-/* #right-wing {} */
+/* .right-wing {} */
 
 #typing-area {
   margin-top: 1rem;
+  margin-bottom: 1rem;
   padding: 1.4rem 1rem;
   border-radius: 0.4rem;
   background: #eaeaea;
@@ -126,8 +127,13 @@ body {
   display: none !important;
 }
 
-body, #header, #left-wing, #right-wing, #typing-area, .config-area, #theme-center, #language-area
+body, #header, #left-wing, .right-wing, #typing-area, .config-area, #theme-center, #language-area
 #text-display, #redo-button, #footer, #highlight {
   transition: all .4s ease-in-out 0s;
 
+}
+
+.clickable {
+  border-bottom: 2px solid;
+  cursor: pointer;
 }

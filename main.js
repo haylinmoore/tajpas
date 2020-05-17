@@ -4,6 +4,9 @@ const inputField = document.querySelector('#input-field');
 const canvas = document.createElement('canvas');
 const favicon = document.querySelector('#favicon');
 const redoButton = document.querySelector('#redo-button');
+const barLanguage = document.querySelector("#barLanguage");
+const barPunctuation = document.querySelector("#barPunctuation");
+const barRWMP = document.querySelector("#barRWPM");
 let ctx = canvas.getContext("2d");
 
 // Initialize typing mode variables
@@ -39,7 +42,7 @@ getCookie('wordCount') === '' ? setWordCount(50) : setWordCount(getCookie('wordC
 getCookie('timeCount') === '' ? setTimeCount(60) : setTimeCount(getCookie('timeCount'));
 getCookie('typingMode') === '' ? setTypingMode('wordcount') : setTypingMode(getCookie('typingMode'));
 getCookie('punctuation') === '' ? setPunctuation('false') : setPunctuation(getCookie('punctuation'));
-setRealTime(getCookie("realTime"));
+getCookie('realTime') === '' ? setRealTime('false') : setRealTime(getCookie('realTime'));
 
 // Find a list of words and display it to textDisplay
 function setText(e) {
@@ -308,7 +311,7 @@ function showResult() {
 			});
 			acc = Math.min(Math.floor((correctKeys / totalKeys) * 100), 100);
 	}
-	document.querySelector('#right-wing').innerHTML = `WPM: ${wpm || 0} / ACC: ${acc || 0}`;
+	document.querySelector('#wpmacc').innerHTML = `WPM: ${wpm || 0} / ACC: ${acc || 0}`;
 }
 
 // Command actions
@@ -395,6 +398,7 @@ function setLanguage(_lang) {
 			if (typeof json[lang] !== 'undefined') {
 				randomWords = json[lang];
 				setCookie('language', lang, 90);
+				barLanguage.innerText = lang;
 
 				if (lang === "arabic") {
 					textDisplay.style.direction = "rtl"
@@ -449,6 +453,8 @@ function setPunctuation(_punc) {
 		setCookie('punctuation', false, 90);
 		setText();
 	}
+
+	barPunctuation.innerText = booleanToYesNo(punc);
 }
 
 function setWordCount(wc) {
@@ -555,6 +561,7 @@ document.querySelector('body').addEventListener('transitionend', function () {
 function setRealTime(value) {
 	realTime = value === "true";
 	setCookie('realTime', realTime, 90);
+	barRWMP.innerText=booleanToYesNo(value);
 	setText();
 }
 
@@ -651,6 +658,14 @@ function showErrorMessage(message) {
 	element.appendChild(document.createTextNode(message));
 }
 
+function booleanToYesNo(boolean){
+	return boolean == "true"? "on" : "off";
+}
+
+function booleanInvert(boolean){
+	return boolean == "true"? "false": "true";
+}
+
 // mouse actions
 document.addEventListener('mouseup', e => {
 	if (e.target.nodeName === 'BODY' && (!document.querySelector('#theme-center').classList.contains('hidden'))) {
@@ -661,3 +676,13 @@ document.addEventListener('mouseup', e => {
 		inputField.focus();
 	}
 });
+
+barLanguage.onclick = toggleLanguageCenter;
+
+barPunctuation.onclick = function(){
+	setPunctuation(booleanInvert(getCookie("punctuation")));
+};
+
+barRWMP.onclick = function(){
+	setRealTime(booleanInvert(getCookie("realTime")));
+};

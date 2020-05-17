@@ -38,7 +38,7 @@
             <span id="tc-240" onclick="setTimeCount(240)">240</span>
           </span>
         </div>
-        <div id="right-wing">WPM: XX / ACC: XX</div>
+        <div class="right-wing" id="wpmacc">WPM: XX / ACC: XX</div>
       </div>
       <div id="typing-area">
         <div id="text-display"></div>
@@ -47,6 +47,10 @@
           <button id="redo-button" onclick="setText(event)" tabindex="2">redo</button>
         </div>
         <span id="error-message" class="wrong hidden"></span>
+      </div>
+      <div class="bar">
+        <div class="right-wing"></div>
+        <div class="right-wing" style="float:right;">lang: <span id="barLanguage" class="clickable"></span> | punc: <a id="barPunctuation" class="clickable"></a> | rwpm: <a id="barRWPM" class="clickable"></a></div>
       </div>
     </div>
     <div id="theme-center" class="hidden">
@@ -59,8 +63,7 @@
     </div>
     <div id="footer">
       <a href="https://github.com/hamptonmoore/typings#typings" target="_blank" tabindex="3">user guide</a>/
-      <div id="show-themes"class="button" onClick="toggleThemeCenter();" tabindex="4">themes</div>/
-      <div id="show-languages"class="button" onClick="toggleLanguageCenter();" tabindex="4">languages</div>
+      <div id="show-themes"class="button" onClick="toggleThemeCenter();" tabindex="4">themes</div>
     </div>
     <script src="main.js"></script>
   </body>
