@@ -9,6 +9,40 @@ const barPunctuation = document.querySelector("#barPunctuation");
 const barRWMP = document.querySelector("#barRWPM");
 let ctx = canvas.getContext("2d");
 
+// Language list
+let languages = {
+	"english": {
+		"name": "English",
+		"type": "array",
+		"loc": "./texts/english.json"
+	},
+	"italian": {
+		"name": "Italian",
+		"type": "array",
+		"loc": "./texts/italian.json"
+	},
+	"german": {
+		"name": "German",
+		"type": "array",
+		"loc": "./texts/german.json"
+	},
+	"spanish": {
+		"name": "Spanish",
+		"type": "array",
+		"loc": "./texts/spanish.json"
+	},
+	"chinese": {
+		"name": "Chinese",
+		"type": "array",
+		"loc": "./texts/chinese.json"
+	},
+	"french": {
+		"name": "French",
+		"type": "array",
+		"loc": "./texts/french.json"
+	}
+};
+
 // Initialize typing mode variables
 let typingMode = 'wordcount';
 let wordCount;
@@ -389,25 +423,21 @@ function setLanguage(_lang) {
 		showErrorMessage("please type the language code for example german in the text box");
 	}
 
-	fetch('texts/languages.json')
-		.then(response => response.json())
-		.then(json => {
-			if (typeof json[lang] !== 'undefined') {
-				fetch(json[lang].loc)
-					.then(response => response.json())
-					.then(words => {
-						randomWords = words
-						setCookie('language', lang, 90);
-						barLanguage.innerText = lang;
+	if (typeof languages[lang] !== 'undefined') {
+		fetch(languages[lang].loc)
+			.then(response => response.json())
+			.then(words => {
+				randomWords = words
+				setCookie('language', lang, 90);
+				barLanguage.innerText = lang;
 
-						setText();
-					})
-					.catch(err => console.error(err));
-			} else {
-				console.error(`language ${lang} is undefined`);
-			}
-		})
-		.catch(err => console.error(err));
+				setText();
+			})
+			.catch(err => console.error(err));
+	} else {
+		showErrorMessage(`language ${lang} is not supported`);
+	}
+
 }
 
 function setTypingMode(_mode) {
