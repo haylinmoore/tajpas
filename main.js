@@ -68,20 +68,15 @@ function setText(e) {
 			textDisplay.style.height = 'auto';
 			textDisplay.innerHTML = '';
 			wordList = [];
-			if (getCookie('language') === 'dots') {
-				// initialize array of dots
-				wordList = [...new Array(Number(wordCount))].map(() => randomWords[0]);
-			} else {
-				while (wordList.length < wordCount) {
-					const randomWord = randomWords[Math.floor(Math.random() * randomWords.length)];
-					if (wordList[wordList.length - 1] !== randomWord || wordList[wordList.length - 1] === undefined) {
-						if (!keepWordList) {
-							wordList = [];
-							while (wordList.length < wordCount) {
-								const randomWord = randomWords[Math.floor(Math.random() * randomWords.length)];
-								if (wordList[wordList.length - 1] !== randomWord || wordList[wordList.length - 1] === undefined || getCookie('language') === 'dots') {
-									wordList.push(randomWord);
-								}
+			while (wordList.length < wordCount) {
+				const randomWord = randomWords[Math.floor(Math.random() * randomWords.length)];
+				if (wordList[wordList.length - 1] !== randomWord || wordList[wordList.length - 1] === undefined) {
+					if (!keepWordList) {
+						wordList = [];
+						while (wordList.length < wordCount) {
+							const randomWord = randomWords[Math.floor(Math.random() * randomWords.length)];
+							if (wordList[wordList.length - 1] !== randomWord || wordList[wordList.length - 1] === undefined || getCookie('language') === 'dots') {
+								wordList.push(randomWord);
 							}
 						}
 					}
@@ -394,23 +389,20 @@ function setLanguage(_lang) {
 		showErrorMessage("please type the language code for example german in the text box");
 	}
 
-	fetch('texts/random.json')
+	fetch('texts/languages.json')
 		.then(response => response.json())
 		.then(json => {
 			if (typeof json[lang] !== 'undefined') {
-				randomWords = json[lang];
-				setCookie('language', lang, 90);
-				barLanguage.innerText = lang;
+				fetch(json[lang].loc)
+					.then(response => response.json())
+					.then(words => {
+						randomWords = words
+						setCookie('language', lang, 90);
+						barLanguage.innerText = lang;
 
-				if (lang === "arabic") {
-					textDisplay.style.direction = "rtl"
-					inputField.style.direction = "rtl"
-				} else {
-					textDisplay.style.direction = "ltr"
-					inputField.style.direction = "ltr"
-				}
-
-				setText();
+						setText();
+					})
+					.catch(err => console.error(err));
 			} else {
 				console.error(`language ${lang} is undefined`);
 			}
@@ -563,7 +555,7 @@ document.querySelector('body').addEventListener('transitionend', function () {
 function setRealTime(value) {
 	realTime = value === "true";
 	setCookie('realTime', realTime, 90);
-	barRWMP.innerText=booleanToYesNo(value);
+	barRWMP.innerText = booleanToYesNo(value);
 	setText();
 }
 
@@ -571,7 +563,7 @@ function setRealTime(value) {
 showAllLanguages();
 
 function showAllLanguages() {
-	fetch("texts/random.json")
+	fetch("texts/languages.json")
 		.then(response => {
 			if (response.status === 200) {
 				response
@@ -621,7 +613,7 @@ function hideLanguageCenter() {
 	document.getElementById('command-center').classList.remove('hidden');
 }
 
-function toggleLanguageCenter(){
+function toggleLanguageCenter() {
 	if (document.querySelector('#language-center').classList.contains('hidden')) {
 		showLanguageCenter();
 	} else {
@@ -640,7 +632,7 @@ function hideThemeCenter() {
 	document.getElementById('command-center').classList.remove('hidden');
 }
 
-function toggleThemeCenter(){
+function toggleThemeCenter() {
 	if (document.querySelector('#theme-center').classList.contains('hidden')) {
 		showThemeCenter();
 	} else {
@@ -660,12 +652,12 @@ function showErrorMessage(message) {
 	element.appendChild(document.createTextNode(message));
 }
 
-function booleanToYesNo(boolean){
-	return boolean == "true"? "on" : "off";
+function booleanToYesNo(boolean) {
+	return boolean == "true" ? "on" : "off";
 }
 
-function booleanInvert(boolean){
-	return boolean == "true"? "false": "true";
+function booleanInvert(boolean) {
+	return boolean == "true" ? "false" : "true";
 }
 
 // mouse actions
@@ -681,10 +673,10 @@ document.addEventListener('mouseup', e => {
 
 barLanguage.onclick = toggleLanguageCenter;
 
-barPunctuation.onclick = function(){
+barPunctuation.onclick = function () {
 	setPunctuation(booleanInvert(getCookie("punctuation")));
 };
 
-barRWMP.onclick = function(){
+barRWMP.onclick = function () {
 	setRealTime(booleanInvert(getCookie("realTime")));
 };
