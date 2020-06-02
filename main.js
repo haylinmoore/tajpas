@@ -16,6 +16,11 @@ let languages = {
 		"type": "array",
 		"loc": "./texts/english.json"
 	},
+	"shakespeare": {
+		"name": "Shakespeare",
+		"type": "array",
+		"loc": "./texts/shakespeare.json"
+	},
 	"italian": {
 		"name": "Italian",
 		"type": "array",
@@ -82,6 +87,10 @@ getCookie('realTime') === '' ? setRealTime('false') : setRealTime(getCookie('rea
 
 // Find a list of words and display it to textDisplay
 function setText(e) {
+	if (randomWords[0] == undefined) {
+		return;
+	}
+
 	e = e || window.event;
 	var keepWordList = e && e.shiftKey;
 
@@ -109,26 +118,14 @@ function setText(e) {
 						wordList = [];
 						while (wordList.length < wordCount) {
 							const randomWord = randomWords[Math.floor(Math.random() * randomWords.length)];
-							if (wordList[wordList.length - 1] !== randomWord || wordList[wordList.length - 1] === undefined || getCookie('language') === 'dots') {
-								wordList.push(randomWord);
+							if (wordList[wordList.length - 1] !== randomWord || wordList[wordList.length - 1] === undefined) {
+								wordList = wordList.concat(randomWord.split(' '));
 							}
 						}
 					}
 				}
 			}
 			break;
-
-		case 'time':
-			textDisplay.style.height = '3.2rem';
-			document.querySelector(`#tc-${timeCount}`).innerHTML = timeCount;
-			textDisplay.innerHTML = '';
-			if (!keepWordList) {
-				wordList = [];
-				for (i = 0; i < 500; i++) {
-					let n = Math.floor(Math.random() * randomWords.length);
-					wordList.push(randomWords[n]);
-				}
-			}
 	}
 
 	if (punctuation) addPunctuations();
@@ -394,7 +391,6 @@ function setTheme(_theme) {
 					.then(css => {
 						setCookie('theme', theme, 90);
 						document.querySelector('#theme').setAttribute('href', `themes/${theme}.css`);
-						setText();
 					})
 					.catch(err => console.error(err));
 			} else {
@@ -452,13 +448,6 @@ function setTypingMode(_mode) {
 			setCookie('typingMode', mode, 90);
 			document.querySelector('#word-count').style.display = 'inline';
 			document.querySelector('#time-count').style.display = 'none';
-			setText();
-			break;
-		case 'time':
-			typingMode = mode;
-			setCookie('typingMode', mode, 90);
-			document.querySelector('#word-count').style.display = 'none';
-			document.querySelector('#time-count').style.display = 'inline';
 			setText();
 			break;
 		default:
