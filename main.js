@@ -593,43 +593,32 @@ function setRealTime(value) {
 showAllLanguages();
 
 function showAllLanguages() {
-	fetch("texts/languages.json")
-		.then(response => {
-			if (response.status === 200) {
-				response
-					.text()
-					.then(body => {
-						let languages = JSON.parse(body);
-						let keys = Object.keys(languages);
-						let i;
 
-						for (i = 0; i < keys.length; i++) {
+	let keys = Object.keys(languages);
+	let i;
 
-							let language = document.createElement('div');
-							language.setAttribute('class', 'theme-button');
-							language.setAttribute('onClick', `setLanguage('${keys[i]}')`);
-							language.setAttribute('id', keys[i]);
+	for (i = 0; i < keys.length; i++) {
 
-							language.setAttribute('tabindex', i + 5);
-							language.addEventListener('keydown', e => {
-								if (e.key === 'Enter') {
-									setTheme(language.id);
-									inputField.focus();
-								}
-							})
+		let language = document.createElement('div');
+		language.setAttribute('class', 'theme-button');
+		language.setAttribute('onClick', `setLanguage('${keys[i]}');hideLanguageCenter();`);
+		language.setAttribute('id', keys[i]);
 
-							language.textContent = keys[i];
-							language.style.background = "rgb(250, 250, 250)";
-							language.style.color = languages[keys[i]]['color'];
-							document.getElementById('language-area').appendChild(language);
-						}
-					})
-					.catch(err => console.error(err));
-			} else {
-				console.log(`Cant find languages`);
+		language.setAttribute('tabindex', i + 5);
+		language.addEventListener('keydown', e => {
+			if (e.key === 'Enter') {
+				setTheme(language.id);
+				inputField.focus();
 			}
 		})
-		.catch(err => console.error(err));
+
+		language.textContent = keys[i];
+		language.style.background = "rgb(250, 250, 250)";
+		language.style.color = languages[keys[i]]['color'];
+		document.getElementById('language-area').appendChild(language);
+	}
+
+
 }
 
 function showLanguageCenter() {
