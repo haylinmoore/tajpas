@@ -16,6 +16,11 @@ let languages = {
 		"type": "array",
 		"loc": "./texts/english.json"
 	},
+	"quotes": {
+		"name": "Quotes",
+		"type": "array",
+		"loc": "./texts/quotes.json"
+	},
 	"shakespeare": {
 		"name": "Shakespeare",
 		"type": "array",
