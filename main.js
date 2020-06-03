@@ -49,7 +49,6 @@ let languages = {
 };
 
 // Initialize typing mode variables
-let typingMode = 'wordcount';
 let wordCount;
 let timeCount;
 
@@ -77,9 +76,7 @@ ctx.textBaseline = "middle"
 // Get cookies
 getCookie('theme') === '' ? setTheme('light') : setTheme(getCookie('theme'));
 getCookie('language') === '' ? setLanguage('english') : setLanguage(getCookie('language'));
-getCookie('wordCount') === '' ? setWordCount(50) : setWordCount(getCookie('wordCount'));
 getCookie('timeCount') === '' ? setTimeCount(60) : setTimeCount(getCookie('timeCount'));
-getCookie('typingMode') === '' ? setTypingMode('wordcount') : setTypingMode(getCookie('typingMode'));
 getCookie('punctuation') === '' ? setPunctuation('false') : setPunctuation(getCookie('punctuation'));
 getCookie('realTime') === '' ? setRealTime('false') : setRealTime(getCookie('realTime'));
 
@@ -106,26 +103,15 @@ function setText(e) {
 	textDisplay.style.display = 'block';
 	inputField.className = '';
 
-	switch (typingMode) {
-		case 'wordcount':
-			textDisplay.style.height = 'auto';
-			textDisplay.innerHTML = '';
-			wordList = [];
-			while (wordList.length < wordCount) {
-				const randomWord = randomWords[Math.floor(Math.random() * randomWords.length)];
-				if (wordList[wordList.length - 1] !== randomWord || wordList[wordList.length - 1] === undefined) {
-					if (!keepWordList) {
-						wordList = [];
-						while (wordList.length < wordCount) {
-							const randomWord = randomWords[Math.floor(Math.random() * randomWords.length)];
-							if (wordList[wordList.length - 1] !== randomWord || wordList[wordList.length - 1] === undefined) {
-								wordList = wordList.concat(randomWord.split(' '));
-							}
-						}
-					}
-				}
-			}
-			break;
+	textDisplay.style.height = '3.2rem';
+	document.querySelector(`#tc-${timeCount}`).innerHTML = timeCount;
+	textDisplay.innerHTML = '';
+	if (!keepWordList) {
+		wordList = [];
+		while (wordList.length < 500) {
+			let n = Math.floor(Math.random() * randomWords.length);
+			wordList = wordList.concat(randomWords[n].split(" "));
+		}
 	}
 
 	if (punctuation) addPunctuations();
@@ -177,12 +163,7 @@ function showText() {
 // Key is pressed in input field
 inputField.addEventListener('keydown', e => {
 	// Add wrong class to input field
-	switch (typingMode) {
-		case 'wordcount':
-			if (currentWord < wordList.length) inputFieldClass();
-		case 'time':
-			if (timerActive) inputFieldClass();
-	}
+	if (timerActive) inputFieldClass();
 
 	function inputFieldClass() {
 		if (e.key >= 'a' && e.key <= 'z' || (e.key === `'` || e.key === ',' || e.key === '.' || e.key === ';')) {
@@ -207,34 +188,29 @@ inputField.addEventListener('keydown', e => {
 			if (realTime) {
 				showResult();
 			}
-			if (typingMode !== "time" || (typingMode === "time" && timerActive)) {
-				resultTimeout = setTimeout(printResult, 1000);
-			}
+			resultTimeout = setTimeout(printResult, 1000);
 		})();
 		startDate = Date.now();
-		switch (typingMode) {
-			case 'time':
-				if (!timerActive) {
-					startTimer(timeCount);
-					timerActive = true;
-				}
+		if (!timerActive) {
+			startTimer(timeCount);
+			timerActive = true;
+		}
 
-				function startTimer(time) {
-					if (time > 0) {
-						document.querySelector(`#tc-${timeCount}`).innerHTML = time;
-						timer = setTimeout(() => {
-							time--;
-							startTimer(time);
-						}, 1000);
-					} else {
-						timerActive = false;
-						textDisplay.style.display = 'none';
-						inputField.className = '';
-						document.querySelector(`#tc-${timeCount}`).innerHTML = timeCount;
-						end();
-						clearTimeout(timer);
-					}
-				}
+		function startTimer(time) {
+			if (time > 0) {
+				document.querySelector(`#tc-${timeCount}`).innerHTML = time;
+				timer = setTimeout(() => {
+					time--;
+					startTimer(time);
+				}, 1000);
+			} else {
+				timerActive = false;
+				textDisplay.style.display = 'none';
+				inputField.className = '';
+				document.querySelector(`#tc-${timeCount}`).innerHTML = timeCount;
+				end();
+				clearTimeout(timer);
+			}
 		}
 	}
 
@@ -263,12 +239,10 @@ inputField.addEventListener('keydown', e => {
 
 		if (inputField.value !== '') {
 			// Scroll down text when reach new line
-			if (typingMode === 'time') {
-				const currentWordPosition = textDisplay.childNodes[currentWord].getBoundingClientRect();
-				const nextWordPosition = textDisplay.childNodes[currentWord + 1].getBoundingClientRect();
-				if (currentWordPosition.top < nextWordPosition.top) {
-					for (i = 0; i < currentWord + 1; i++) textDisplay.childNodes[i].style.display = 'none';
-				}
+			const currentWordPosition = textDisplay.childNodes[currentWord].getBoundingClientRect();
+			const nextWordPosition = textDisplay.childNodes[currentWord + 1].getBoundingClientRect();
+			if (currentWordPosition.top < nextWordPosition.top) {
+				for (i = 0; i < currentWord + 1; i++) textDisplay.childNodes[i].style.display = 'none';
 			}
 
 			// If it is not the last word increment currentWord,
@@ -315,30 +289,15 @@ function showResult() {
 	let minute, acc;
 	let totalKeys = wordList.length === currentWord ? -1 : inputField.value.length;
 	const wpm = Math.floor(correctKeys / 5 / ((Date.now() - startDate) / 1000 / 60));
-	switch (typingMode) {
-		case 'wordcount':
-			minute = (Date.now() - startDate) / 1000 / 60;
-			wordList.some((e, index) => {
-				if (currentWord === index) {
-					return true;
-				}
-				totalKeys += e.length + 1;
-				return false;
-			});
-			acc = Math.floor((correctKeys / totalKeys) * 100);
-			break;
-
-		case 'time':
-			minute = timeCount / 60;
-			wordList.some((e, index) => {
-				if (currentWord === index) {
-					return true;
-				}
-				totalKeys += e.length + 1;
-				return false;
-			});
-			acc = Math.min(Math.floor((correctKeys / totalKeys) * 100), 100);
-	}
+	minute = timeCount / 60;
+	wordList.some((e, index) => {
+		if (currentWord === index) {
+			return true;
+		}
+		totalKeys += e.length + 1;
+		return false;
+	});
+	acc = Math.min(Math.floor((correctKeys / totalKeys) * 100), 100);
 	document.querySelector('#wpmacc').innerHTML = `WPM: ${wpm || 0} / ACC: ${acc || 0}`;
 }
 
@@ -353,11 +312,6 @@ document.addEventListener('keydown', e => {
 		// [mod + l] => Change the language
 		if (e.key === 'l') {
 			setLanguage(inputField.value);
-		}
-
-		// [mod + m] => Change the typing mode
-		if (e.key === 'm') {
-			setTypingMode(inputField.value);
 		}
 
 		// [mod + p] => Change punctuation active
@@ -434,25 +388,6 @@ function setLanguage(_lang) {
 		showErrorMessage(`language ${lang} is not supported`);
 	}
 
-}
-
-function setTypingMode(_mode) {
-	if (resultTimeout !== null) {
-		clearTimeout(resultTimeout);
-		resultTimeout = null;
-	}
-	const mode = _mode.toLowerCase();
-	switch (mode) {
-		case 'wordcount':
-			typingMode = mode;
-			setCookie('typingMode', mode, 90);
-			document.querySelector('#word-count').style.display = 'inline';
-			document.querySelector('#time-count').style.display = 'none';
-			setText();
-			break;
-		default:
-			console.error(`mode ${mode} is undefine`);
-	}
 }
 
 function setPunctuation(_punc) {
